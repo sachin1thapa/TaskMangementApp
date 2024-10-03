@@ -2,29 +2,34 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Layout from './components/common-layout/Layout';
 import TaskPage from './pages/TaskPage';
 import ScrumbBoardPage from './pages/ScrumbBoardPage';
-import SignInPage from './pages/auth/SignInPage';
-import SignUpPage from './pages/auth/SignUpPage';
+import AuthPage from './pages/AuthPage';
+import TaskListPage from './pages/TaskListPage'; // Import the missing component
+import ErrorPage from './pages/ErrorPage';
 
+// routes
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [
       {
-        path: '/',
+        path: 'task',
         element: <TaskPage />,
+        children: [
+          {
+            path: 'list',
+            element: <TaskListPage />,
+          },
+          {
+            path: 'scrumb-board',
+            element: <ScrumbBoardPage />,
+          },
+        ],
       },
       {
-        path: '/auth/signin',
-        element: <SignInPage />,
-      },
-      {
-        path: '/auth/signup',
-        element: <SignUpPage />,
-      },
-      {
-        path: '/scrumbboard',
-        element: <ScrumbBoardPage />,
+        path: 'auth',
+        element: <AuthPage />,
       },
     ],
   },
