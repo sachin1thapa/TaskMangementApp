@@ -40,10 +40,10 @@ const registerUser = asyncHandler(async (req, res) => {
   // }
   // if the user exist already or not
   const existedUser = await User.findOne({
-    $or: [{ username }, { email }],
+    email
   });
   if (existedUser) {
-    throw new ApiError(409, 'User already Existed ');
+    throw new ApiError(409, 'Email already exist try with another email');
   }
 
   // create a user
@@ -59,7 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const curretUser = await User.findById(user._id).select('-password -refreshToken');
 
   if (!curretUser) {
-    throw new ApiError(500, 'something went wrong while creating the user  ');
+    throw new ApiError(500, 'something went wrong while creating the user');
   }
   return res.status(201).json(new ApiResponse(201, curretUser, 'User Register Sucessfully'));
 });
@@ -140,7 +140,7 @@ const logedOutUser = asyncHandler(async (req, res) => {
 
 const RefreshAcessToken = asyncHandler(async (req, res) => {
   const recivedToken = req.cookies.refreshToken || req.body.refreshToken;
-  // console.log(recivedToken);
+  console.log(recivedToken);
   if (!recivedToken) {
     throw new ApiError(401, 'Unauthorized request');
   }
@@ -160,6 +160,7 @@ const RefreshAcessToken = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
+    sameSite: 'Strict',
   };
   const { refreshToken, accessToken } = await generateAccessTokenAndRefreshToken(user._id);
   return res

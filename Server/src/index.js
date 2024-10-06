@@ -21,12 +21,15 @@ app.use(
   })
 );
 
+app.use(morgan('tiny'));
+
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(cookieParser());
 
 // route
 import userRoute from './routes/user.routes.js';
-import { User } from './models/user.models.js';
+import morgan from 'morgan';
+
 app.use('/api/v1/users', userRoute);
 
 // connect to the database and start the server
@@ -40,13 +43,14 @@ connectdb()
     console.log('MONGO db connection Error !!!', err);
   });
 
-app.get('/', async (req, res) => {
-  const userInformation = {
-    name: 'John Doe1',
-    email: 'thapasachin1231@gmail.com',
-    password: 'password1',
-  };
-  const insert = await User.create(userInformation);
-  res.send(insert);
-  // res.send('Hello World');
+// error handling middleware
+app.use((err, req, res, next) => {
+  // Log the error stack for debugging purposes
+  // console.error(err.stack);
+  const statusCode = err.statusCode || 500;
+  // Send JSON response with error message and status
+  res.status(statusCode).json({
+    result: 'error',
+    message: err.message,
+  });
 });

@@ -2,8 +2,9 @@ import CommonButton from './CommonButton';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '../ui/select';
+import { STATUSES } from '@/redux/authSlice';
 
-function CommonForm({ formcontrols = [], handleSubmit, form, btntext, isloadingicon }) {
+function CommonForm({ formcontrols = [], handleSubmit, form, btntext, UserInfo }) {
   return (
     <Form {...form}>
       {/* {console.log(form)} */}
@@ -59,12 +60,19 @@ function CommonForm({ formcontrols = [], handleSubmit, form, btntext, isloadingi
               />
             ))
           : null}
+        {
+          <p className="text-red-500 text-sm mt-1">
+            {UserInfo?.status === STATUSES.ERROR && UserInfo?.error}
+          </p>
+        }
+        
+        
         <CommonButton
           type="submit"
           buttonText={btntext}
           className="w-full h-12 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-150 ease-in-out 
           focus:outline-none focus:ring-2 focus:ring-blue-500"
-          icon={isloadingicon}
+          icon={UserInfo?.status === STATUSES.LOADING}
         />
       </form>
     </Form>

@@ -1,12 +1,10 @@
-export const callRegisterApi = async (data) => {
-  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/register`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-    credentials: 'include',
-  });
-  const Fetcheddata = await response.json();
-  return Fetcheddata;
+import { axiosPrivate } from '@/api/axios';
+
+// Refresh token function
+const refreshTokenApi = async () => {
+  console.log('called refresh token api');
+  await axiosPrivate.get('/user/refresh-token');
+  // return response.data.accessToken;
 };
+
+export { refreshTokenApi };

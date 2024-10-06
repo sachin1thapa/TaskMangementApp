@@ -41,7 +41,7 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
 		next();  		// so that the next function is able to run  
 	} catch (error) {
 		throw new ApiError(
-			401,
+			403,
 			'Unauthorized request: Invalid or expired access token'
 		);
 	}
